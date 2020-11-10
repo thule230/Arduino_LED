@@ -6,26 +6,76 @@
     android:layout_height="match_parent"
     tools:context=".TelaInicial">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="Iniciar"
-        android:id="@+id/bt_iniciar"
-        android:onClick="scanear"
-        />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/sc_texto">
 
-<!--    <Button-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintLeft_toLeftOf="parent"-->
-<!--        app:layout_constraintRight_toRightOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/bt_iniciar"-->
-<!--        android:text="Conectar"-->
-<!--        android:onClick="conectar"-->
-<!--        />-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/ly_texto"
+            android:layout_marginTop="200dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DESCUBRA-ME"
+                android:textSize="30sp"
+                android:id="@+id/tv_texto"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="20dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_qr"
+                android:layout_below="@id/tv_texto"
+                android:textSize="20dp"
+                android:text="Ð scanear QR"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_achar"
+                android:layout_below="@id/tv_qr"
+                android:textSize="20dp"
+                android:text="Ð scanear QR"
+                android:layout_marginLeft="20dp"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_achar"
+                android:text="Entrar"
+                android:id="@+id/bt_iniciar"
+                android:onClick="scanear"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="20dp"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_achar"
+                android:text="Sair"
+                android:id="@+id/bt_fechar"
+                android:onClick="fechar"
+                android:layout_marginTop="30dp"
+                android:layout_toRightOf="@id/bt_iniciar"
+                android:layout_marginLeft="20dp"
+                />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

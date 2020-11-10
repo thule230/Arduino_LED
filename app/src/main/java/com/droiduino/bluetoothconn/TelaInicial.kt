@@ -20,11 +20,6 @@ class TelaInicial : AppCompatActivity() {
         IntentIntegrator(this@TelaInicial).initiateScan()
     }
 
-//    fun conectar (componente: View){
-//        val intent = Intent(this, SelectDeviceActivity::class.java)
-//        startActivity(intent)
-//    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         var result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
@@ -37,5 +32,9 @@ class TelaInicial : AppCompatActivity() {
             Toast.makeText(this, "Erro de leitura", Toast.LENGTH_SHORT).show()
             super.onActivityResult(requestCode, resultCode, data)
         }
+    }
+
+    fun fechar (componente: View){
+        this.finishAffinity()
     }
 }

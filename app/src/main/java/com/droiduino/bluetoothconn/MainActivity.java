@@ -9,6 +9,8 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,10 +19,8 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
@@ -40,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
     public static ConnectedThread connectedThread;
     public static CreateConnectThread createConnectThread;
 
+    public boolean verdadeiro = false;
+    public boolean sedutor = false;
+    public boolean curioso = false;
+
     private final static int CONNECTING_STATUS = 1; // used in bluetooth handler to identify message status
     private final static int MESSAGE_READ = 2; // used in bluetooth handler to identify message update
 
@@ -49,13 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // UI Initialization
-//        final Button buttonConnect = findViewById(R.id.buttonConnect);
         final Toolbar toolbar = findViewById(R.id.toolbar);
-//        final ProgressBar progressBar = findViewById(R.id.progressBar);
-//        progressBar.setVisibility(View.GONE);
-//        final TextView textViewInfo = findViewById(R.id.textViewInfo);
-        final Button buttonToggle = findViewById(R.id.buttonToggle);
-        buttonToggle.setEnabled(false);
         final ImageView imageView = findViewById(R.id.imageView);
         imageView.setBackgroundColor(getResources().getColor(R.color.colorOff));
 
@@ -68,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
             deviceAddress = getIntent().getStringExtra("deviceAddress");
             // Show progree and connection status
             toolbar.setSubtitle("Conectando ao " + deviceName + "...");
-//            progressBar.setVisibility(View.VISIBLE);
-//            buttonConnect.setEnabled(false);
 
             /*
             This is the most important piece of code. When "deviceName" is found
@@ -94,67 +90,17 @@ public class MainActivity extends AppCompatActivity {
                                 toolbar.setSubtitle("Conectado ao " + deviceName);
                                 toolbar.setVisibility(View.INVISIBLE);
                                 imageView.setVisibility(View.VISIBLE);
-//                                progressBar.setVisibility(View.GONE);
-//                                buttonConnect.setEnabled(true);
-                                buttonToggle.setEnabled(true);
+                                editText.setSelected(true);
                                 break;
                             case -1:
                                 toolbar.setSubtitle("Falha na conexão");
-//                                progressBar.setVisibility(View.GONE);
-//                                buttonConnect.setEnabled(true);
                                 break;
                         }
                         break;
 
-//                    case MESSAGE_READ:
-//                        String arduinoMsg = msg.obj.toString(); // Read message from Arduino
-//                        switch (arduinoMsg.toLowerCase()){
-//                            case "led is turned on":
-//                                imageView.setBackgroundColor(getResources().getColor(R.color.colorOn));
-////                                textViewInfo.setText("Arduino Message : " + arduinoMsg);
-//                                break;
-//                            case "led is turned off":
-//                                imageView.setBackgroundColor(getResources().getColor(R.color.colorOff));
-////                                textViewInfo.setText("Arduino Message : " + arduinoMsg);
-//                                break;
-//                        }
-//                        break;
                 }
             }
         };
-
-//        // Select Bluetooth Device
-//        buttonConnect.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                // Move to adapter list
-//                Intent intent = new Intent(MainActivity.this, SelectDeviceActivity.class);
-//                startActivity(intent);
-//            }
-//        });
-
-        // Button to ON/OFF LED on Arduino Board
-//        buttonToggle.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                String cmdText = null;
-//                String btnState = buttonToggle.getText().toString().toLowerCase();
-//                switch (btnState){
-//                    case "turn on":
-//                        buttonToggle.setText("Turn Off");
-//                        // Command to turn on LED on Arduino. Must match with the command in Arduino code
-//                        cmdText = "<turn on>";
-//                        break;
-//                    case "turn off":
-//                        buttonToggle.setText("Turn On");
-//                        // Command to turn off LED on Arduino. Must match with the command in Arduino code
-//                        cmdText = "<turn off>";
-//                        break;
-//                }
-//                // Send command to Arduino board
-//                connectedThread.write(cmdText);
-//            }
-//        });
 
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -167,41 +113,130 @@ public class MainActivity extends AppCompatActivity {
                     if (event == null || !event.isShiftPressed()) {
 
                         if (editText.getText().toString().toUpperCase().equals("CURIOSO")){
-                            toolbar.setSubtitle("Foi");
                             editText.setText("");
 
                             String cmdText = null;
-//                            String btnState = buttonToggle.getText().toString().toLowerCase();
 
                             // Command to turn on LED on Arduino. Must match with the command in Arduino code
-                            cmdText = "<turn on>";
+                            cmdText = "<curioso>";
 
-                            AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                            final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
                             alertDialog.setMessage("O desejo pelo novo, por conhecer, por saber. A curiosidade traz " +
-                                    "emoçõae nos leva mais longe. A curiosidade desperta o conhecimento");
-                            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "X",
+                                    "emoções nos leva mais longe. A curiosidade desperta o conhecimento");
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Continuar",
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
                                             dialog.dismiss();
+                                            finalizar();
                                         }
                                     });
+                            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Sair",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            connectedThread.write("<apagartodos>");
+                                            System.exit(0);
+                                        }
+                                    });
+                            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xFFFFFF66));
+
+                            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                                @Override
+                                public void onShow(DialogInterface dialogInterface) {
+                                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#FC1034"));
+                                    alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.parseColor("#FC1034"));
+                                }
+                            });
+
                             alertDialog.show();
 
                             // Send command to Arduino board
                             connectedThread.write(cmdText);
+
+                            curioso = true;
                         }
-                        else {
-                            toolbar.setSubtitle("Errou");
+                        else if (editText.getText().toString().toUpperCase().equals("SEDUTOR")){
                             editText.setText("");
 
                             String cmdText = null;
-//                            String btnState = buttonToggle.getText().toString().toLowerCase();
 
                             // Command to turn on LED on Arduino. Must match with the command in Arduino code
-                            cmdText = "<turn off>";
+                            cmdText = "<sedutor>";
+
+                            final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                            alertDialog.setMessage("O prazer pela conquista. A sedução está relacionada a confiança," +
+                                    " determinação. O exercício da argumentação, da troca.");
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Continuar",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                            finalizar();
+                                        }
+                                    });
+                            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Sair",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            connectedThread.write("<apagartodos>");
+                                            System.exit(0);
+                                        }
+                                    });
+                            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xFFFFFF66));
+
+                            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                                @Override
+                                public void onShow(DialogInterface dialogInterface) {
+                                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#FC1034"));
+                                    alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.parseColor("#FC1034"));
+                                }
+                            });
+
+                            alertDialog.show();
 
                             // Send command to Arduino board
                             connectedThread.write(cmdText);
+
+                            sedutor = true;
+                        }
+                        else if (editText.getText().toString().toUpperCase().equals("VERDADEIRO")){
+                            editText.setText("");
+
+                            String cmdText = null;
+
+                            // Command to turn on LED on Arduino. Must match with the command in Arduino code
+                            cmdText = "<verdadeiro>";
+
+                            final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                            alertDialog.setMessage("A verdade e transparente sempre. É viver sem culpa, é a demonstração" +
+                                    " do caráter. A sinceridade em primeiro lugar.");
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Continuar",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                            finalizar();
+                                        }
+                                    });
+                            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Sair",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            connectedThread.write("<apagartodos>");
+                                            System.exit(0);
+                                        }
+                                    });
+                            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xFFFFFF66));
+
+                            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                                @Override
+                                public void onShow(DialogInterface dialogInterface) {
+                                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#FC1034"));
+                                    alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.parseColor("#FC1034"));
+                                }
+                            });
+
+                            alertDialog.show();
+
+                            // Send command to Arduino board
+                            connectedThread.write(cmdText);
+
+                            verdadeiro = true;
                         }
 
                         return true; // consume.
@@ -355,5 +390,34 @@ public class MainActivity extends AppCompatActivity {
         a.addCategory(Intent.CATEGORY_HOME);
         a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(a);
+    }
+
+    public void finalizar(){
+        if (curioso && verdadeiro && sedutor){
+            EditText editText = findViewById(R.id.et_texto);
+
+            editText.setText("");
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+            alertDialog.setMessage("Parabéns!\n" +
+                                   "Missão cumprida.");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Sair",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            connectedThread.write("<apagartodos>");
+                            System.exit(0);
+                        }
+                    });
+            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xFFFFFF66));
+
+            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialogInterface) {
+                    alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.parseColor("#FC1034"));
+                }
+            });
+
+            alertDialog.show();
+        }
     }
 }
