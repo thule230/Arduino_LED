@@ -238,6 +238,30 @@ public class MainActivity extends AppCompatActivity {
 
                             verdadeiro = true;
                         }
+                        else {
+
+                            editText.setText("");
+
+                            final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+                            alertDialog.setMessage("Ops! Tente novamente!");
+                            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Continuar",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.dismiss();
+                                            finalizar();
+                                        }
+                                    });
+                            alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(0xFFFFFF66));
+
+                            alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                                @Override
+                                public void onShow(DialogInterface dialogInterface) {
+                                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.parseColor("#FC1034"));
+                                }
+                            });
+
+                            alertDialog.show();
+                        }
 
                         return true; // consume.
                     }

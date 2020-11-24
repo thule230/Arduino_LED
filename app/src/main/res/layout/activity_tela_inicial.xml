@@ -7,40 +7,44 @@
     tools:context=".TelaInicial">
 
     <ImageView
+        android:id="@+id/imageView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/inicio"
-        />
+        android:src="@drawable/inicio" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginTop="550dp"
+        el
+        >
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:text="apalavra"
-            android:layout_marginLeft="60dp"
-            android:layout_marginTop="545dp"
+            android:backgroundTint="#00EE64"
+            android:fontFamily="@font/stencil_time"
             android:onClick="scanear"
-            android:textColor="#00000000"
-            android:backgroundTint="#00000000"
-            />
+            android:text="Entrar"
+            android:textColor="#000000"
+            android:textFontWeight="1000"
+            android:textSize="18sp"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="30dp"
+           />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:text="apalavra"
-            android:layout_marginLeft="220dp"
-            android:layout_marginTop="545dp"
+            android:backgroundTint="#00EE64"
+            android:fontFamily="@font/stencil_time"
             android:onClick="fechar"
-            android:textColor="#00000000"
-            android:backgroundTint="#00000000"
-            android:outlineSpotShadowColor="#00000000"
+            android:text="Sair"
+            android:textColor="#000000"
+            android:textFontWeight="1000"
+            android:textSize="18sp"
             />
-
-
-    </RelativeLayout>
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
